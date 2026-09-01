@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}{{ post.title }} — Eliya{% endblock %}
+{% block content %}
+
+<header class="page-header">
+  <a href="/blog" class="back-link">← Back to Blog</a>
+  <h1>{{ post.title }}</h1>
+  <p class="blog-date">{{ post.date }}</p>
+</header>
+
+<section class="blog-single">
+  <p>{{ post.content }}</p>
+</section>
+
+<a href="{{ social.whatsapp }}" target="_blank" class="floating-whatsapp">💬 Chat on WhatsApp</a>
+
+{% endblock %}

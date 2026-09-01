@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Eliya — Tools{% endblock %}
+{% block content %}
+
+<header class="page-header">
+  <a href="/" class="back-link">← Back to Home</a>
+  <h1>Our Tools</h1>
+</header>
+
+<section class="tools-list">
+
+  <div class="tool-card-large">
+    <h2>Eliya AI Video Generator</h2>
+    <p>Turn a simple text script into a professional AI marketing video —
+    natural voice, talking AI presenter, lip-sync, captions, and your
+    branding, all done in minutes.</p>
+    <ul>
+      <li>AI-generated voice & avatar presenter</li>
+      <li>Auto-synced captions</li>
+      <li>Multiple formats (9:16, 16:9, 1:1)</li>
+      <li>Downloadable MP4</li>
+    </ul>
+    <a href="{{ social.whatsapp }}" target="_blank" class="cta-btn">Get Started on WhatsApp</a>
+  </div>
+
+  <div class="tool-card-large coming-soon">
+    <h2>More tools coming soon</h2>
+    <p>We're building more AI-powered tools under the Eliya brand. Stay tuned.</p>
+  </div>
+
+</section>
+
+<a href="{{ social.whatsapp }}" target="_blank" class="floating-whatsapp">💬 Chat on WhatsApp</a>
+
+{% endblock %}
+
