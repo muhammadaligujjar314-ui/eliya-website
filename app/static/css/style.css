@@ -16,18 +16,46 @@ body {
 .hero {
   text-align: center;
   padding: 60px 20px;
-  background: linear-gradient(180deg, var(--white) 50%, var(--sage) 50%);
+  background: linear-gradient(135deg, #3F4E42 0%, #5A6B5D 60%, #4A5A4D 100%);
+  position: relative;
+  overflow: hidden;
 }
 
-.logo { width: 140px; margin-bottom: 20px; }
+.hero::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -20%;
+  width: 140%;
+  height: 100%;
+  background: linear-gradient(120deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0) 50%);
+  transform: rotate(-8deg);
+  pointer-events: none;
+}
+
+.logo {
+  width: 140px;
+  margin-bottom: 20px;
+  border-radius: 50%;
+  background: var(--white);
+  padding: 8px;
+  position: relative;
+  z-index: 1;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+}
 
 .hero h1 {
   font-size: 3rem;
   letter-spacing: 4px;
   color: var(--white);
+  position: relative;
+  z-index: 1;
 }
 
-.tagline { color: var(--cream); margin-top: 10px; }
+.tagline {
+  position: relative;
+  z-index: 1;
+}
 
 .socials {
   display: flex;
