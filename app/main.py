@@ -1,7 +1,7 @@
 from flask import Flask, render_template, abort
 from dotenv import load_dotenv
-from config import SOCIAL_LINKS
-from blog_data import BLOG_POSTS
+from app.config import SOCIAL_LINKS
+from app.blog_data import BLOG_POSTS
 
 load_dotenv()
 
@@ -37,4 +37,3 @@ def blog_post(slug):
 
 if __name__ == "__main__":
     app.run(debug=True, port=5000)
-    
