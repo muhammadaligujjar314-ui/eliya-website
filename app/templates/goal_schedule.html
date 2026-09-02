@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% block title %}Daily Schedule — Eliya Goals{% endblock %}
+{% block content %}
+
+<header class="page-header goals-header">
+  <a href="/goals" class="back-link">← Back to Goals</a>
+  <h1>Daily Schedule</h1>
+</header>
+
+<section class="goal-form-section">
+  <input type="text" id="habitName" placeholder="What habit are you building? e.g. Daily coding" class="goal-input">
+  <button onclick="startHabit()" class="cta-btn">Start</button>
+
+  <div id="habitTracker" style="display:none; margin-top:30px;">
+    <h2 id="habitTitle"></h2>
+    <div id="habitGauge" class="gauge-wrap"></div>
+    <p class="streak-text">Days completed: <span id="habitStreak">0</span></p>
+    <div id="habitGrid" class="day-grid"></div>
+
+    <div class="reminder-box">
+      <h3>Reminders</h3>
+      <button onclick="requestNotifyPermission()" class="cta-btn small-btn">Enable Notifications</button>
+      <input type="time" id="reminderTime" class="goal-input">
+      <input type="text" id="reminderLabel" placeholder="Reminder message e.g. Class time" class="goal-input">
+      <button onclick="addReminder()" class="cta-btn">Add Reminder</button>
+      <ul id="reminderList" class="reminder-list"></ul>
+    </div>
+  </div>
+</section>
+
+<script src="{{ url_for('static', filename='js/goals.js') }}"></script>
+<script>
+  const HKEY = "eliya_habit_goal";
+  const RKEY = "eliya_habit_reminders";
+  let hData = loadGoalData(HKEY, null);
+
+  function startHabit() {
+    const name = document.getElementById("habitName").value.trim();
+    if (!name) return alert("Habit likhein pehle");
+    hData = { name: name, checked: [] };
+    saveGoalData(HKEY, hData);
+    render();
+  }
+
+  function toggleHabitDay(day) {
+    const idx = hData.checked.indexOf(day);
+    if (idx > -1) hData.checked.splice(idx, 1);
+    else hData.checked.push(day);
+    saveGoalData(HKEY, hData);
+    render();
+  }
+
+  function addReminder() {
+    const time = document.getElementById("reminderTime").value;
+    const label = document.getElementById("reminderLabel").value.trim();
+    if (!time || !label) return alert("Time aur message dono daalein");
+    const list = loadGoalData(RKEY, []);
+    list.push({ time: time, label: label, lastFired: null });
+    saveGoalData(RKEY, list);
+    document.getElementById("reminderLabel").value = "";
+    renderReminders();
+  }
+
+  function removeReminder(idx) {
+    const list = loadGoalData(RKEY, []);
+    list.splice(idx, 1);
+    saveGoalData(RKEY, list);
+    renderReminders();
+  }
+
+  function renderReminders() {
+    const list = loadGoalData(RKEY, []);
+    const ul = document.getElementById("reminderList");
+    ul.innerHTML = "";
+    list.forEach((r, i) => {
+      const li = document.createElement("li");
+      li.innerHTML = `${r.time} — ${r.label} <button onclick="removeReminder(${i})">✕</button>`;
+      ul.appendChild(li);
+    });
+  }
+
+  function render() {
+    if (!hData) return;
+    document.getElementById("habitTracker").style.display = "block";
+    document.getElementById("habitTitle").textContent = hData.name;
+    document.getElementById("habitStreak").textContent = hData.checked.length;
+    renderGrid("habitGrid", 30, hData.checked, toggleHabitDay);
+    renderGauge("habitGauge", (hData.checked.length / 30) * 100);
+    renderReminders();
+  }
+
+  if (hData) render();
+  startReminderWatcher(RKEY);
+</script>
+
+{% endblock %}

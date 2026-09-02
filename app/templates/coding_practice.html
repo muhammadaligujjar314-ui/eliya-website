@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Coding Practice — Eliya Goals{% endblock %}
+{% block content %}
+
+<header class="page-header goals-header">
+  <a href="/goals" class="back-link">← Back to Goals</a>
+  <h1>Coding Practice (JavaScript)</h1>
+</header>
+
+<section class="coding-practice-section">
+  <div class="code-panel">
+    <textarea id="codeInput" class="code-textarea" placeholder="console.log('Hello Eliya');"></textarea>
+    <button onclick="runCode()" class="cta-btn">Run Code</button>
+    <pre id="codeOutput" class="code-output"></pre>
+  </div>
+
+  <div class="guide-panel">
+    <h3>Quick Guide</h3>
+    <ul>
+      <li><code>console.log()</code> — print output</li>
+      <li><code>let x = 5;</code> — variable</li>
+      <li><code>function name() {}</code> — function</li>
+      <li><code>for (let i=0; i&lt;5; i++) {}</code> — loop</li>
+      <li><code>if (x > 0) {}</code> — condition</li>
+    </ul>
+  </div>
+</section>
+
+<script>
+  function runCode() {
+    const code = document.getElementById("codeInput").value;
+    const output = document.getElementById("codeOutput");
+    let logs = [];
+    const originalLog = console.log;
+    console.log = (...args) => logs.push(args.join(" "));
+    try {
+      eval(code);
+      output.textContent = logs.join("\n") || "(no output)";
+    } catch (e) {
+      output.textContent = "Error: " + e.message;
+    }
+    console.log = originalLog;
+  }
+</script>
+
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Eliya Goals — Track Your Growth{% endblock %}
+{% block content %}
+
+<header class="page-header goals-header">
+  <a href="/" class="back-link">← Back to Home</a>
+  <h1>Eliya Goals</h1>
+  <p class="goals-subtitle">Set your goal. Track every day. See yourself grow.</p>
+</header>
+
+<section class="goal-types">
+
+  <div class="goal-type-card">
+    <div class="goal-icon">🎯</div>
+    <h2>Custom Goal</h2>
+    <p>Set any personal goal and track your daily progress.</p>
+    <a href="/goals/custom" class="cta-btn">Start</a>   <!-- Custom Goal -->
+    <a href="/goals/money" class="cta-btn">Start</a>     <!-- Money Goal -->
+    <a href="/goals/roadmap" class="cta-btn">Start</a>   <!-- Developer Roadmap -->
+    <a href="/goals/schedule" class="cta-btn">Start</a>  <!-- Daily Schedule -->
+  </div>
+
+  <div class="goal-type-card">
+    <div class="goal-icon">💰</div>
+    <h2>Money Goal</h2>
+    <p>Save toward a target amount and watch your progress grow.</p>
+    <a href="#" class="cta-btn">Start</a>
+  </div>
+
+  <div class="goal-type-card">
+    <div class="goal-icon">👨‍💻</div>
+    <h2>Developer Roadmap</h2>
+    <p>Tell us what you want to become, get a step-by-step roadmap.</p>
+    <a href="#" class="cta-btn">Start</a>
+  </div>
+
+  <div class="goal-type-card">
+    <div class="goal-icon">📅</div>
+    <h2>Daily Schedule</h2>
+    <p>Build a daily habit and track your streak.</p>
+    <a href="#" class="cta-btn">Start</a>
+  </div>
+
+  <div class="goal-type-card">
+    <div class="goal-icon">💻</div>
+    <h2>Coding Practice</h2>
+    <p>Practice JavaScript with a live guide by your side.</p>
+    <a href="/goals/coding" class="cta-btn">Start</a>
+  </div>
+
+</section>
+
+<a href="{{ social.whatsapp }}" target="_blank" class="floating-whatsapp">💬 Chat on WhatsApp</a>
+
+{% endblock %}
+

@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}Money Goal — Eliya Goals{% endblock %}
+{% block content %}
+
+<header class="page-header goals-header">
+  <a href="/goals" class="back-link">← Back to Goals</a>
+  <h1>Money Goal</h1>
+</header>
+
+<section class="goal-form-section">
+  <input type="text" id="moneyGoalName" placeholder="What are you saving for?" class="goal-input">
+  <input type="number" id="targetAmount" placeholder="Target amount" class="goal-input">
+  <button onclick="startMoneyGoal()" class="cta-btn">Set Goal</button>
+
+  <div id="moneyTracker" style="display:none; margin-top:30px;">
+    <h2 id="moneyTitle"></h2>
+    <div id="moneyGauge" class="gauge-wrap"></div>
+    <div class="progress-bar-outer">
+      <div id="progressBarInner" class="progress-bar-inner"></div>
+    </div>
+    <p id="progressText"></p>
+    <input type="number" id="addAmount" placeholder="Add amount saved">
+    <button onclick="addSavings()" class="cta-btn">Add</button>
+  </div>
+</section>
+
+<script src="{{ url_for('static', filename='js/goals.js') }}"></script>
+<script>
+  const MKEY = "eliya_money_goal";
+  let mData = loadGoalData(MKEY, null);
+
+  function startMoneyGoal() {
+    const name = document.getElementById("moneyGoalName").value.trim();
+    const target = parseFloat(document.getElementById("targetAmount").value);
+    if (!name || !target) return alert("Naam aur target amount daalein");
+    mData = { name: name, target: target, saved: 0 };
+    saveGoalData(MKEY, mData);
+    render();
+  }
+
+  function addSavings() {
+    const amt = parseFloat(document.getElementById("addAmount").value);
+    if (!amt) return;
+    mData.saved += amt;
+    saveGoalData(MKEY, mData);
+    document.getElementById("addAmount").value = "";
+    render();
+  }
+
+  function render() {
+    if (!mData) return;
+    document.getElementById("moneyTracker").style.display = "block";
+    document.getElementById("moneyTitle").textContent = mData.name;
+    const pct = Math.min(100, (mData.saved / mData.target) * 100);
+    document.getElementById("progressBarInner").style.width = pct + "%";
+    document.getElementById("progressText").textContent =
+      mData.saved + " / " + mData.target + " (" + pct.toFixed(1) + "%)";
+      renderGauge("moneyGauge", pct);
+  }
+
+  if (mData) render();
+</script>
+
+{% endblock %}
+

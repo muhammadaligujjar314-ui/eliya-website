@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Developer Roadmap — Eliya Goals{% endblock %}
+{% block content %}
+
+<header class="page-header goals-header">
+  <a href="/goals" class="back-link">← Back to Goals</a>
+  <h1>Developer Roadmap</h1>
+</header>
+
+<section class="goal-form-section">
+  <input type="text" id="roadmapGoal" placeholder="What do you want to become? e.g. Python Developer" class="goal-input">
+  <button onclick="generateRoadmap()" class="cta-btn" id="genBtn">Generate Roadmap</button>
+
+  <div id="roadmapResult" class="roadmap-result"></div>
+</section>
+
+<script>
+  async function generateRoadmap() {
+    const goal = document.getElementById("roadmapGoal").value.trim();
+    if (!goal) return alert("Pehle apna goal likhein");
+    const btn = document.getElementById("genBtn");
+    btn.textContent = "Generating...";
+    btn.disabled = true;
+
+    try {
+      const res = await fetch("/api/generate-roadmap", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ goal: goal })
+      });
+      const data = await res.json();
+      if (data.error) {
+        document.getElementById("roadmapResult").textContent = "Error: " + data.error;
+      } else {
+        document.getElementById("roadmapResult").textContent = data.roadmap;
+      }
+    } catch (e) {
+      document.getElementById("roadmapResult").textContent = "Kuch ghalat ho gaya, dobara try karein.";
+    }
+    btn.textContent = "Generate Roadmap";
+    btn.disabled = false;
+  }
+</script>
+
+{% endblock %}
+
