@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 from app.config import SOCIAL_LINKS
 from app.blog_data import BLOG_POSTS
 import os
-from groq import Groq
+
 
 load_dotenv()
 
@@ -62,7 +62,9 @@ def coding_practice():
     return render_template("coding_practice.html")
 
 @app.route("/api/generate-roadmap", methods=["POST"])
+
 def generate_roadmap():
+    from groq import Groq
     from flask import request, jsonify
     goal = request.json.get("goal", "").strip()
     if not goal:

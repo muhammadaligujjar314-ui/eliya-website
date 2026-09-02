@@ -2,6 +2,20 @@
 {% block title %}Eliya Goals — Track Your Growth{% endblock %}
 {% block content %}
 
+<section class="dashboard-section">
+  <h2>Your Progress</h2>
+  <div class="dashboard-grid">
+    <div class="chart-card">
+      <h3>Overall Completion</h3>
+      <canvas id="pieChart"></canvas>
+    </div>
+    <div class="chart-card">
+      <h3>Goals Comparison</h3>
+      <canvas id="barChart"></canvas>
+    </div>
+  </div>
+</section>
+
 <header class="page-header goals-header">
   <a href="/" class="back-link">← Back to Home</a>
   <h1>Eliya Goals</h1>
@@ -51,6 +65,81 @@
 </section>
 
 <a href="{{ social.whatsapp }}" target="_blank" class="floating-whatsapp">💬 Chat on WhatsApp</a>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<script>
+  function getGoalsSummary() {
+    const labels = [];
+    const percents = [];
+
+    const custom = JSON.parse(localStorage.getItem("eliya_custom_goal") || "null");
+    if (custom) {
+      labels.push(custom.name.slice(0, 15));
+      percents.push(Math.round((custom.checked.length / 30) * 100));
+    }
+
+    const money = JSON.parse(localStorage.getItem("eliya_money_goal") || "null");
+    if (money) {
+      labels.push(money.name.slice(0, 15));
+      percents.push(Math.min(100, Math.round((money.saved / money.target) * 100)));
+    }
+
+    const habit = JSON.parse(localStorage.getItem("eliya_habit_goal") || "null");
+    if (habit) {
+      labels.push(habit.name.slice(0, 15));
+      percents.push(Math.round((habit.checked.length / 30) * 100));
+    }
+
+    return { labels, percents };
+  }
+
+  const { labels, percents } = getGoalsSummary();
+
+  if (labels.length === 0) {
+    document.querySelector(".dashboard-section").innerHTML =
+      "<p class='no-goals-text'>No goals started yet — pick one below to begin tracking.</p>";
+  } else {
+    const avgDone = percents.reduce((a, b) => a + b, 0) / percents.length;
+    const avgPending = 100 - avgDone;
+
+    new Chart(document.getElementById("pieChart"), {
+      type: "doughnut",
+      data: {
+        labels: ["Completed", "Remaining"],
+        datasets: [{
+          data: [avgDone.toFixed(1), avgPending.toFixed(1)],
+          backgroundColor: ["#6EE7B7", "rgba(255,255,255,0.08)"],
+          borderColor: "#0F1512",
+          borderWidth: 2
+        }]
+      },
+      options: {
+        plugins: { legend: { labels: { color: "#D0D8D2" } } }
+      }
+    });
+
+    new Chart(document.getElementById("barChart"), {
+      type: "bar",
+      data: {
+        labels: labels,
+        datasets: [{
+          label: "% Complete",
+          data: percents,
+          backgroundColor: "#6EE7B7",
+          borderRadius: 6
+        }]
+      },
+      options: {
+        scales: {
+          y: { beginAtZero: true, max: 100, ticks: { color: "#B7C4BB" }, grid: { color: "rgba(255,255,255,0.05)" } },
+          x: { ticks: { color: "#B7C4BB" }, grid: { display: false } }
+        },
+        plugins: { legend: { display: false } }
+      }
+    });
+  }
+</script>
 
 {% endblock %}
 
